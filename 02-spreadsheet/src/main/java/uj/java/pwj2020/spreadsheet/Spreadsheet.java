@@ -2,11 +2,11 @@ package uj.java.pwj2020.spreadsheet;
 
 public class Spreadsheet {
 
-    public enum FieldType{value, reference, formula};
-    public enum FormulaType{ADD, SUB, MUL, DIV, MOD};
+    public enum FieldType{value, reference, formula}
+    public enum FormulaType{ADD, SUB, MUL, DIV, MOD}
 
     public boolean isNumber(char a){
-        if((int)a <= 57 && (int)a >= 48 )
+        if(((int)a <= 57 && (int)a >= 48) || a == '-')
             return true;
         return false;
     }
@@ -20,7 +20,7 @@ public class Spreadsheet {
     public int toNumber(String a, int beginIndex){
 
         int i = beginIndex;
-        while(isNumber(a.charAt(i))) i++;
+        while(i < a.length() && isNumber(a.charAt(i))) i++;
 
         return Integer.parseInt(a.substring(beginIndex, i));
     }
@@ -60,15 +60,27 @@ public class Spreadsheet {
         int i = 0;
         int[] x = new int[2];
         int[] address = new int[2];
-        double result = 0;
+        int[] address2 = new int[2];
+        int result = 0;
 
         for(int j = 0; j < 2; j++) {
-            while (a.charAt(i) != '$' && !isNumber(a.charAt(i)))
+            while (i < a.length() - 1 && a.charAt(i) != '$' && !isNumber(a.charAt(i)))
                 i++;
+
             if (isNumber(a.charAt(i))) {
                 x[j] = toNumber(a, i);
             } else {
                 address = getAddress(a, i + 1);
+
+                while(checkType(out[address[0]][address[1]]) == FieldType.reference){
+                    address2 = getAddress(out[address[0]][address[1]], 1);
+                    out[address[0]][address[1]] = out[address2[0]][address2[1]];
+                }
+
+                while(checkType(out[address[0]][address[1]]) == FieldType.formula){
+                    out[address[0]][address[1]] = calculateFormula(out[address[0]][address[1]], input, type, out);
+                }
+
                 x[j] = Integer.parseInt(out[address[0]][address[1]]);
             }
             while(i < a.length() &&  a.charAt(i) != ',') i++;
@@ -82,14 +94,17 @@ public class Spreadsheet {
             case MUL -> result = x[0] * x[1];
         }
 
-        return Double.toString(result);
+        return Integer.toString(result);
     }
 
     public int[] getAddress(String a, int beginIndex){
         int[] out = new int[2];
 
-        out[0] = (int)a.charAt(beginIndex) - 65;
-        out[1] = (int)a.charAt(beginIndex + 1) - 48 - 1;// get the int value the sub 1 for proper indexes
+        out[1] = (int)a.charAt(beginIndex) - 65;
+
+        int i = beginIndex + 1;
+        while(i < a.length() && isNumber(a.charAt(i))) i++;
+        out[0] = Integer.parseInt(a.substring(beginIndex + 1, i)) - 1;
 
         return out;
     }
@@ -107,14 +122,21 @@ public class Spreadsheet {
 
                 if(type != FieldType.value){
                     if(type == FieldType.reference){ //copy the value form another field
-                        int[] adress = getAddress(input[i][j], 1);// get the adress form input string
-                        System.out.println(adress[0] + " " + adress[1]);
-                        out[i][j] = input[adress[0]][adress[1]];// get the value from adress to current field
+                        int[] address = getAddress(input[i][j], 1);// get the address form input string
+                        out[i][j] = input[address[0]][address[1]];// get the value from address to current field
+
+                        while(checkType(out[i][j]) == FieldType.reference){
+                            address = getAddress(out[i][j], 1);
+                            out[i][j] = input[address[0]][address[1]];
+                        }
                     }
                     else{// formula type of field
                             formType = checkFormula(input[i][j]);
                             out[i][j] = calculateFormula(input[i][j], input, formType, out);
                     }
+                }
+                else {
+                    out[i][j] = input[i][j];
                 }
             }
         }
