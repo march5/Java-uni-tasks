@@ -10,7 +10,7 @@ import java.util.zip.ZipEntry;
 
 
 public class FloridaInsurance {
-//zmiana
+
     public static int countCountry(List<InsuranceEntry> list){
 
         List<String> countedCountries = new ArrayList<>();
