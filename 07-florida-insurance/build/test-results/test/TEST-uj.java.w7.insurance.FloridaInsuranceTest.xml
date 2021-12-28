@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="uj.java.w7.insurance.FloridaInsuranceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-12-14T18:17:38" hostname="DESKTOP-67GM0CL" time="0.02">
+<testsuite name="uj.java.w7.insurance.FloridaInsuranceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-12-14T18:30:29" hostname="DESKTOP-67GM0CL" time="0.021">
   <properties/>
-  <testcase name="checkTiv2012()" classname="uj.java.w7.insurance.FloridaInsuranceTest" time="0.016"/>
+  <testcase name="checkTiv2012()" classname="uj.java.w7.insurance.FloridaInsuranceTest" time="0.017"/>
   <testcase name="checkMostValuable()" classname="uj.java.w7.insurance.FloridaInsuranceTest" time="0.002"/>
   <testcase name="checkCount()" classname="uj.java.w7.insurance.FloridaInsuranceTest" time="0.001"/>
   <system-out><![CDATA[Count file already exists

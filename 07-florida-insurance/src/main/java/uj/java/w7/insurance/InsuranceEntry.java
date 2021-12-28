@@ -1,8 +1,6 @@
 package uj.java.w7.insurance;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 
 public class InsuranceEntry {
 
